@@ -11,7 +11,9 @@ namespace AlmoxarifadoInfrastructure.Data.Interfaces
     {
         List<NotaFiscal> ObterTodosNotaFiscal();
         NotaFiscal ObterNotaFiscalPorId(int id);
-
         NotaFiscal CriarNotaFiscal(NotaFiscal notaFiscal);
+        NotaFiscal AtualizarNotaFiscal(NotaFiscal notaFiscal);
+        NotaFiscal ExcluirNotaFiscal(NotaFiscal notaFiscal);
     }
+
 }

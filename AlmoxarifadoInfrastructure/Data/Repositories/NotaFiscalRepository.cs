@@ -1,5 +1,6 @@
 ﻿using AlmoxarifadoDomain.Models;
 using AlmoxarifadoInfrastructure.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +70,49 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories
             _context.NotasFiscais.Add(notaFiscal);
             _context.SaveChanges();
 
+            return notaFiscal;
+        }
+
+        public NotaFiscal AtualizarNotaFiscal(NotaFiscal notaFiscal)
+        {
+            var notaExistente = _context.NotasFiscais.FirstOrDefault(nota => nota.IdNota == notaFiscal.IdNota);
+            if (notaExistente != null)
+            {
+                notaExistente.IdFor = notaFiscal.IdFor;
+                notaExistente.IdSec = notaFiscal.IdSec;
+                notaExistente.NumNota = notaFiscal.NumNota;
+                notaExistente.ValorNota = notaFiscal.ValorNota;
+                notaExistente.QtdItem = notaFiscal.QtdItem;
+                notaExistente.Icms = notaFiscal.Icms;
+                notaExistente.Iss = notaFiscal.Iss;
+                notaExistente.Ano = notaFiscal.Ano;
+                notaExistente.Mes = notaFiscal.Mes;
+                notaExistente.DataNota = notaFiscal.DataNota;
+                notaExistente.IdTipoNota = notaFiscal.IdTipoNota;
+                notaExistente.ObservacaoNota = notaFiscal.ObservacaoNota;
+                notaExistente.EmpenhoNum = notaFiscal.EmpenhoNum;
+
+                _context.SaveChanges();
+                return notaExistente;
+            }
+            else
+            {
+                throw new InvalidOperationException("Nota Fiscal não encontrada!");
+            }
+        }
+
+        public NotaFiscal ExcluirNotaFiscal(NotaFiscal notaFiscal)
+        {
+            var notaFiscalComItens = _context.NotasFiscais
+                .Include(notaFiscal => notaFiscal.ItensNota)
+                .FirstOrDefault(notaFiscal => notaFiscal.IdNota == notaFiscal.IdNota);
+
+            if (notaFiscalComItens != null)
+            {
+                _context.ItensNota.RemoveRange(notaFiscalComItens.ItensNota);
+                _context.NotasFiscais.Remove(notaFiscalComItens);
+                _context.SaveChanges();
+            }
             return notaFiscal;
         }
     }

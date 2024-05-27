@@ -79,5 +79,42 @@ namespace AlmoxarifadoServices
             };
         }
 
+        public NotaFiscalGetDTO AtualizarNotaFiscal(int id, NotaFiscalPutDTO notaFiscalAtualizada)
+        {
+            var notaFiscal = _notaFiscalRepository.ObterNotaFiscalPorId(id);
+
+            if (notaFiscal != null)
+            {
+                notaFiscal.IdFor = notaFiscalAtualizada.IdFor;
+                notaFiscal.IdSec = notaFiscalAtualizada.IdSec;
+                notaFiscal.NumNota = notaFiscalAtualizada.NumNota;
+                notaFiscal.ValorNota = notaFiscalAtualizada.ValorNota;
+                notaFiscal.QtdItem = notaFiscalAtualizada.QtdItem;
+                notaFiscal.Icms = notaFiscalAtualizada.Icms;
+                notaFiscal.Iss = notaFiscalAtualizada.Iss;
+                notaFiscal.Ano = notaFiscalAtualizada.Ano;
+                notaFiscal.Mes = notaFiscalAtualizada.Mes;
+                notaFiscal.DataNota = notaFiscalAtualizada.DataNota;
+                notaFiscal.IdTipoNota = notaFiscalAtualizada.IdTipoNota;
+                notaFiscal.ObservacaoNota = notaFiscalAtualizada.ObservacaoNota;
+                notaFiscal.EmpenhoNum = notaFiscalAtualizada.EmpenhoNum;
+
+                _notaFiscalRepository.AtualizarNotaFiscal(notaFiscal);
+
+                var mapper = configurationMapper.CreateMapper();
+                return mapper.Map<NotaFiscalGetDTO>(notaFiscal);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public NotaFiscalGetDTO ExcluirNotaFiscal(NotaFiscal notaFiscal)
+        {
+            var notaFiscalExcluida = _notaFiscalRepository.ExcluirNotaFiscal(notaFiscal);
+
+            return configurationMapper.CreateMapper().Map<NotaFiscalGetDTO>(notaFiscalExcluida);
+        }
     }
 }
