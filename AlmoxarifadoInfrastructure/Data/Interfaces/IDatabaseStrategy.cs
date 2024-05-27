@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace AlmoxarifadoInfrastructure.Data.Interfaces
 {
-    internal interface IDatabaseStrategy
+    public interface IDatabaseStrategy
     {
+        string GetConnectionString();
+
     }
 }

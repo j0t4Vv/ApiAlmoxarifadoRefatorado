@@ -9,7 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<xAlmoxarifadoContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoDBSQL")));
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoDBSQL"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ConexaoReplicaSQL"),
+                          providerOptions => providerOptions.EnableRetryOnFailure());
+});
+
+builder.Services.AddSingleton<IDatabaseStrategy, ConexaoPrincipalSQLStrategy>();
+builder.Services.AddSingleton<IDatabaseStrategy, ConexaoReplicaSQLStrategy>();
 
 //Carregando Classes de Repositories
 builder.Services.AddScoped<GrupoService>();
