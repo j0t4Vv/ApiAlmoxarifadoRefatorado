@@ -11,7 +11,8 @@ namespace AlmoxarifadoInfrastructure.Data.Interfaces
     {
         List<Requisicao> ObterTudoRequisicao();
         Requisicao ObterRequisicaoPorId(int id);
-
         Requisicao CriarRequisicao(Requisicao requisicao);
+        Requisicao AtualizarRequisicao(Requisicao requisicao);
+        Requisicao ExcluirRequisicao(Requisicao requisicao);
     }
 }

@@ -66,5 +66,42 @@ namespace AlmoxarifadoAPI.Controllers
                 return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
             }
         }
+
+        [HttpPut("{id}")]
+        public IActionResult AtualizarRequisicao(int id, RequisicaoPutDTO requisicao)
+        {
+            try
+            {
+                var requisicaoAtualizada = _requisicaoService.AtualizarRequisicao(id, requisicao);
+                if (requisicaoAtualizada == null)
+                {
+                    return StatusCode(404, "Nenhuma Requisicao Encontrada com Este ID");
+                }
+                return Ok(requisicaoAtualizada);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro ao atualizar a requisição. Por favor, tente novamente mais tarde.");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult ExcluirRequisicao(int id)
+        {
+            try
+            {
+                var requisicaoExcluida = _requisicaoService.ExcluirRequisicao(id);
+                if (requisicaoExcluida == null)
+                {
+                    return StatusCode(404, "Nenhuma Requisicao Encontrada com Este ID");
+                }
+                return Ok(requisicaoExcluida);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro ao excluir a requisição. Por favor, tente novamente mais tarde.");
+            }
+        }
+
     }
 }

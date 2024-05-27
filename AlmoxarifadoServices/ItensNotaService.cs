@@ -64,5 +64,39 @@ namespace AlmoxarifadoServices
                 EstLin = itensNotaSalvo.EstLin
             };
         }
+        public ItensNotaGetDTO AtualizarItensNota(int id, ItensNotaPutDTO novoItemNota)
+        {
+            var itemNotaExistente = _itensNotaRepository.ObterItensNotaPorId(id);
+            if (itemNotaExistente != null)
+            {
+                itemNotaExistente.IdPro = novoItemNota.IdPro;
+                itemNotaExistente.IdNota = novoItemNota.IdNota;
+                itemNotaExistente.IdSec = novoItemNota.IdSec;
+                itemNotaExistente.QtdPro = novoItemNota.QtdPro;
+                itemNotaExistente.PreUnit = novoItemNota.PreUnit;
+                itemNotaExistente.TotalItem = novoItemNota.TotalItem;
+                itemNotaExistente.EstLin = novoItemNota.EstLin;
+
+                _itensNotaRepository.AtualizarItemNota(itemNotaExistente);
+
+                var mapper = configurationMapper.CreateMapper();
+                return mapper.Map<ItensNotaGetDTO>(itemNotaExistente);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public ItensNotaGetDTO ExcluirItensNota(ItensNota id)
+        {
+            var itemNotaExcluido = _itensNotaRepository.ExcluirItemNota(id);
+            if (itemNotaExcluido != null)
+            {
+                var mapper = configurationMapper.CreateMapper();
+                return mapper.Map<ItensNotaGetDTO>(itemNotaExcluido);
+            }
+            return null;
+        }
     }
 }

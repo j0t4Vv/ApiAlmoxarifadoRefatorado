@@ -72,6 +72,41 @@ namespace AlmoxarifadoServices
                 Observacao = requisicaoSalva.Observacao
             };
         }
+        public RequisicaoGetDTO AtualizarRequisicao(int id, RequisicaoPutDTO novaRequisicao)
+        {
+            var requisicaoExistente = _requisicaoRepository.ObterRequisicaoPorId(id);
+            if (requisicaoExistente != null)
+            {
+                requisicaoExistente.IdCli = novaRequisicao.IdCli;
+                requisicaoExistente.TotalReq = novaRequisicao.TotalReq;
+                requisicaoExistente.QtdIten = novaRequisicao.QtdIten;
+                requisicaoExistente.DataReq = novaRequisicao.DataReq;
+                requisicaoExistente.Ano = novaRequisicao.Ano;
+                requisicaoExistente.Mes = novaRequisicao.Mes;
+                requisicaoExistente.IdSec = novaRequisicao.IdSec;
+                requisicaoExistente.IdSet = novaRequisicao.IdSet;
+                requisicaoExistente.Observacao = novaRequisicao.Observacao;
 
+                _requisicaoRepository.AtualizarRequisicao(requisicaoExistente);
+
+                var mapper = configurationMapper.CreateMapper();
+                return mapper.Map<RequisicaoGetDTO>(requisicaoExistente);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public RequisicaoGetDTO ExcluirRequisicao(int id)
+        {
+            var requisicaoExcluida = _requisicaoRepository.ExcluirRequisicao(id);
+            if (requisicaoExcluida != null)
+            {
+                var mapper = configurationMapper.CreateMapper();
+                return mapper.Map<RequisicaoGetDTO>(requisicaoExcluida);
+            }
+            return null;
+        }
     }
 }

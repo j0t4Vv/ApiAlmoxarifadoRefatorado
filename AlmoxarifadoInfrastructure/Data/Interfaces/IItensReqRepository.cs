@@ -11,7 +11,8 @@ namespace AlmoxarifadoInfrastructure.Data.Interfaces
     {
         List<ItensReq> ObterTodosItensReq();
         ItensReq ObterItensReqPorId(int id);
-
         ItensReq CriarItensReq(ItensReq itensReq);
+        ItensReq AtualizarItensReq(ItensReq itensReq);
+        ItensReq ExcluirItensReq(ItensReq itensReq);
     }
 }

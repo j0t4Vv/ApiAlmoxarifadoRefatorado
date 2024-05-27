@@ -1,10 +1,9 @@
 ﻿using AlmoxarifadoDomain.Models;
 using AlmoxarifadoInfrastructure.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlmoxarifadoInfrastructure.Data.Repositories
 {
@@ -12,52 +11,54 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories
     {
         private readonly xAlmoxarifadoContext _context;
 
-        public ItensReqRepository(xAlmoxarifadoContext pContext)
+        public ItensReqRepository(xAlmoxarifadoContext context)
         {
-            _context = pContext;
+            _context = context;
         }
 
         public List<ItensReq> ObterTodosItensReq()
         {
-            return _context.ItensReqs
-                    .Select(itensReq => new ItensReq
-                    {
-                        NumItem = itensReq.NumItem,
-                        IdPro = itensReq.IdPro,
-                        IdReq = itensReq.IdReq,
-                        IdSec = itensReq.IdSec,
-                        QtdPro = itensReq.QtdPro,
-                        PreUnit = itensReq.PreUnit,
-                        TotalItem = itensReq.TotalItem,
-                        TotalReal = itensReq.TotalReal
-
-                    })
-                    .ToList();
+            return _context.ItensReqs.ToList();
         }
 
         public ItensReq ObterItensReqPorId(int id)
         {
-            return _context.ItensReqs
-                   .Select(itensReq => new ItensReq
-                   {
-                       NumItem = itensReq.NumItem,
-                       IdPro = itensReq.IdPro,
-                       IdReq = itensReq.IdReq,
-                       IdSec = itensReq.IdSec,
-                       QtdPro = itensReq.QtdPro,
-                       PreUnit = itensReq.PreUnit,
-                       TotalItem = itensReq.TotalItem,
-                       TotalReal = itensReq.TotalReal
-                   })
-                   .ToList().First(x => x?.NumItem == id);
+            return _context.ItensReqs.FirstOrDefault(item => item.NumItem == id);
         }
 
-        public ItensReq CriarItensReq(ItensReq itensReq)
+        public ItensReq CriarItensReq(ItensReq itemReq)
         {
-            _context.ItensReqs.Add(itensReq);
+            _context.ItensReqs.Add(itemReq);
             _context.SaveChanges();
+            return itemReq;
+        }
 
-            return itensReq;
+        public ItensReq AtualizarItensReq(ItensReq itemReq)
+        {
+            var itemExistente = _context.ItensReqs.FirstOrDefault(item => item.NumItem == itemReq.NumItem);
+            if (itemExistente != null)
+            {
+                itemExistente.IdPro = itemReq.IdPro;
+                itemExistente.IdReq = itemReq.IdReq;
+                itemExistente.IdSec = itemReq.IdSec;
+                itemExistente.QtdPro = itemReq.QtdPro;
+                itemExistente.PreUnit = itemReq.PreUnit;
+                itemExistente.TotalItem = itemReq.TotalItem;
+                itemExistente.TotalReal = itemReq.TotalReal;
+                _context.SaveChanges();
+                return itemExistente;
+            }
+            else
+            {
+                throw new InvalidOperationException("Item de requisição não encontrado!");
+            }
+        }
+
+        public ItensReq ExcluirItensReq(ItensReq itemReq)
+        {
+            var itemExcluido = _context.ItensReqs.Remove(itemReq);
+            _context.SaveChanges();
+            return itemExcluido.Entity;
         }
     }
 }

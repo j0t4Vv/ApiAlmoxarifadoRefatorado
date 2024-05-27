@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlmoxarifadoInfrastructure.Data.Repositories
 {
@@ -53,7 +51,7 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories
                        IdSet = requisicao.IdSet,
                        Observacao = requisicao.Observacao
                    })
-                   .ToList().First(x => x?.IdReq == id);
+                   .ToList().FirstOrDefault(x => x?.IdReq == id);
         }
 
         public Requisicao CriarRequisicao(Requisicao requisicao)
@@ -62,6 +60,36 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories
             _context.SaveChanges();
 
             return requisicao;
+        }
+
+        public Requisicao AtualizarRequisicao(Requisicao requisicao)
+        {
+            var requisicaoExistente = _context.Requisicoes.FirstOrDefault(r => r.IdReq == requisicao.IdReq);
+            if (requisicaoExistente != null)
+            {
+                requisicaoExistente.IdCli = requisicao.IdCli;
+                requisicaoExistente.TotalReq = requisicao.TotalReq;
+                requisicaoExistente.QtdIten = requisicao.QtdIten;
+                requisicaoExistente.DataReq = requisicao.DataReq;
+                requisicaoExistente.Ano = requisicao.Ano;
+                requisicaoExistente.Mes = requisicao.Mes;
+                requisicaoExistente.IdSec = requisicao.IdSec;
+                requisicaoExistente.IdSet = requisicao.IdSet;
+                requisicaoExistente.Observacao = requisicao.Observacao;
+                _context.SaveChanges();
+                return requisicaoExistente;
+            }
+            else
+            {
+                throw new InvalidOperationException("Requisição não encontrada!");
+            }
+        }
+
+        public Requisicao ExcluirRequisicao(Requisicao requisicao)
+        {
+            var requisicaoExcluida = _context.Requisicoes.Remove(requisicao);
+            _context.SaveChanges();
+            return requisicaoExcluida.Entity;
         }
     }
 }

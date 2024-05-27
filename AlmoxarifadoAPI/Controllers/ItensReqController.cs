@@ -32,7 +32,7 @@ namespace AlmoxarifadoAPI.Controllers
 
         }
 
-        [HttpGet("{NumItem}")]
+        [HttpGet("{id}")]
         public IActionResult GetPorID(int id)
         {
             try
@@ -64,6 +64,48 @@ namespace AlmoxarifadoAPI.Controllers
             {
 
                 return StatusCode(500, "Ocorreu um erro ao acessar os dados. Por favor, tente novamente mais tarde.");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult AtualizarItensReq(int id, ItensReqPutDTO itensReq)
+        {
+            try
+            {
+                var itensReqAtualizado = _itensReqService.AtualizarItensReq(id, itensReq);
+                if (itensReqAtualizado == null)
+                {
+                    return StatusCode(404, "Nenhum item encontrado com este ID");
+                }
+                return Ok(itensReqAtualizado);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro ao acessar os dados.");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult ExcluirItensReq(int id)
+        {
+            try
+            {
+                var itemReq = _itensReqService.ObterItensReqPorId(id);
+                if (itemReq == null)
+                {
+                    return StatusCode(404, "Nenhum item encontrado com este ID");
+                }
+
+                var itemExcluido = _itensReqService.ExcluirItensReq(itemReq);
+                if (itemExcluido == null)
+                {
+                    return StatusCode(404, "Ocorreu um erro ao excluir o item");
+                }
+                return Ok(itemExcluido);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Ocorreu um erro ao acessar os dados.");
             }
         }
     }

@@ -1,10 +1,9 @@
 ﻿using AlmoxarifadoDomain.Models;
 using AlmoxarifadoInfrastructure.Data.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AlmoxarifadoInfrastructure.Data.Repositories
 {
@@ -26,9 +25,9 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories
                     IdPro = itensNota.IdPro,
                     IdNota = itensNota.IdNota,
                     IdSec = itensNota.IdSec,
-                    QtdPro = itensNota .QtdPro,
+                    QtdPro = itensNota.QtdPro,
                     PreUnit = itensNota.PreUnit,
-                    TotalItem = itensNota .TotalItem,
+                    TotalItem = itensNota.TotalItem,
                     EstLin = itensNota.EstLin
                 })
                 .ToList();
@@ -48,7 +47,7 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories
                     TotalItem = itensNota.TotalItem,
                     EstLin = itensNota.EstLin
                 })
-                .ToList().First(x => x?.ItemNum == id);
+                .ToList().FirstOrDefault(x => x?.ItemNum == id);
         }
 
 
@@ -58,6 +57,35 @@ namespace AlmoxarifadoInfrastructure.Data.Repositories
             _context.SaveChanges();
 
             return itensNota;
+        }
+
+        public ItensNota AtualizarItemNota(ItensNota itensNota)
+        {
+            var itemNotaExistente = _context.ItensNota.FirstOrDefault(i => i.ItemNum == itensNota.ItemNum);
+            if (itemNotaExistente != null)
+            {
+                itemNotaExistente.IdPro = itensNota.IdPro;
+                itemNotaExistente.IdNota = itensNota.IdNota;
+                itemNotaExistente.IdSec = itensNota.IdSec;
+                itemNotaExistente.QtdPro = itensNota.QtdPro;
+                itemNotaExistente.PreUnit = itensNota.PreUnit;
+                itemNotaExistente.TotalItem = itensNota.TotalItem;
+                itemNotaExistente.EstLin = itensNota.EstLin;
+
+                _context.SaveChanges();
+                return itemNotaExistente;
+            }
+            else
+            {
+                throw new InvalidOperationException("Item de nota não encontrado!");
+            }
+        }
+
+        public ItensNota ExcluirItemNota(ItensNota itensNota)
+        {
+            var itemNotaExcluido = _context.ItensNota.Remove(itensNota);
+            _context.SaveChanges();
+            return itemNotaExcluido.Entity;
         }
     }
 }
