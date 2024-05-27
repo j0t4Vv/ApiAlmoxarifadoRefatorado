@@ -98,7 +98,7 @@ namespace AlmoxarifadoServices
             }
         }
 
-        public RequisicaoGetDTO ExcluirRequisicao(int id)
+        public RequisicaoGetDTO ExcluirRequisicao(Requisicao id)
         {
             var requisicaoExcluida = _requisicaoRepository.ExcluirRequisicao(id);
             if (requisicaoExcluida != null)

@@ -86,7 +86,7 @@ namespace AlmoxarifadoAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult ExcluirRequisicao(int id)
+        public IActionResult ExcluirRequisicao(Requisicao id)
         {
             try
             {

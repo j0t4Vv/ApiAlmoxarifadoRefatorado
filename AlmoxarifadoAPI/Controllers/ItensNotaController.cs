@@ -1,6 +1,7 @@
 ﻿using AlmoxarifadoServices.DTO;
 using AlmoxarifadoServices;
 using Microsoft.AspNetCore.Mvc;
+using AlmoxarifadoDomain.Models;
 
 namespace AlmoxarifadoAPI.Controllers
 {
@@ -85,7 +86,7 @@ namespace AlmoxarifadoAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult ExcluirItensNota(int id)
+        public IActionResult ExcluirItensNota(ItensNota id)
         {
             try
             {
